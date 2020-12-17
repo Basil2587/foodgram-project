@@ -1,0 +1,12 @@
+{% extends "base.html" %} 
+{% load thumbnail %}
+{% load static %}
+
+
+<a href="{% url 'article' profile %}" >
+    <img src="{% static 'media/like.jpg' %}" width="25" height="25" style="margin-top:-7px;">
+            </a>
+
+            <div class="likes"  href="{% url 'likes' post.author.username post.id %}">
+                <button onclick="likes"><img src="{% static 'media/like.png' %}"  width="25" height="25" style="margin-top:-7px;">{{ post.likes }}</button>
+                 </div>

@@ -1,0 +1,61 @@
+
+name: foodgram_workflow
+
+on: [push]
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python 
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.8
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install flake8
+        pip install -r requirements.txt
+    - name: Lint_with_flake8 --ignore=E501,F401,F403,F405,F811,F821,W292  .
+      run: flake8 .
+  push_to_docker_hub:
+      name: Push Docker image to Docker Hub
+      runs-on: ubuntu-latest
+      needs: tests
+      steps:
+        - name: Check out the repo
+          uses: actions/checkout@v2
+
+        - name: Push to Docker Hub
+          uses: docker/build-push-action@v1
+          with:
+            username: basil087
+            password: ${{ secrets.DOCKER_PASSWORD }}
+            repository: basil087/foodgram
+            tag_with_ref: true
+  deploy:
+    runs-on: ubuntu-latest
+    needs: push_to_docker_hub
+    steps:
+    - name: executing remote ssh commands to deploy
+      uses: appleboy/ssh-action@master
+      with:
+        host: 84.201.148.248
+        username: basil
+        key: ${{ secrets.SSH_KEY }}
+        port: 22
+        script: |
+          sudo docker pull basil087/foodgram
+  send_message:
+      runs-on: ubuntu-latest
+      needs: deploy
+      steps:
+      - name: send message
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TELEGRAM_TO }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          message: ${{ github.workflow }} успешно выполнен!

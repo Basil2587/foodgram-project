@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <style type="text/css">
+    h1 { 
+     font-size: 45px; 
+     font-style: italic;
+     text-transform: uppercase; 
+     font-family: 'William', serif;
+     color: #0931e2;
+    }
+    </style>
+    {%  if post %}
+    <h1>Редактировать запись</h1>
+    {% else %}
+    <h1>Добавить запись</h1>
+    {% endif %}
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <table>
+        {{ form.as_table }}
+        </table>
+       {% if post %} 
+       <div class="col-md-6 offset-md-4">
+            <button type="submit" class="save btn btn-success">Сохранить</button>       
+        </div>
+        {% else  %}
+        <div class="col-md-6 offset-md-4">
+            <button type="submit" class="save btn btn-primary">Добавить</button>       
+        </div>
+        {% endif %}
+    </form>
+{% endblock %}
