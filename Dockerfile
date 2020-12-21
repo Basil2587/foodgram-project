@@ -8,4 +8,4 @@ RUN pip install pip --upgrade && pip install -r requirements.txt
 
 RUN python manage.py collectstatic --noinput
 
-CMD gunicorn api_yamdb.wsgi:application --bind 0.0.0.0:5000
+CMD gunicorn foodgramsite.wsgi:application --bind 0.0.0.0:5000

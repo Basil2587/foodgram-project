@@ -1,0 +1,38 @@
+version: '3.3'
+
+volumes:
+  postgres_data:
+  staticfiles:
+  mediafiles: 
+
+
+services:
+  db:
+    image: postgres:13
+    restart: always
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    env_file:
+      - ./.env
+
+  web:
+    image: basil087/yamdb_final:latest
+    volumes:
+      - staticfiles:/code/static/
+      - mediafiles:/code/media/
+    ports:
+      - 5000:5000
+    depends_on:
+      - db
+    env_file:
+      - ./.env
+
+  nginx:
+    build: ./nginx
+    volumes:
+      - staticfiles:/code/static/
+      - mediafiles:/code/media/
+    ports:
+      - "500:80"
+    depends_on:
+      - web
