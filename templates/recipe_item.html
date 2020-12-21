@@ -1,0 +1,23 @@
+{% csrf_token %}
+    <div class="card" ="120" data-id="{{ recipe.id }}">
+        {% load thumbnail %}
+            {% thumbnail recipe.image "600x600" as im %}
+            <a href="{% url 'recipe' recipe.author.username recipe.id %}" class="link" target="_blank"><img src="{{ im.url }}" alt="Какой-то текст" class="card__image"></a>
+            {% endthumbnail %} 
+        <div class="card__body">
+            <a class="card__title link" href="{% url 'recipe' recipe.author.username recipe.id %}" target="_blank">{{ recipe.title }}</a>
+            <ul class="card__items">
+                    {% for tag in recipe.tag.all %}
+                        <li class="single-card__item"><span class="badge badge_style_{{ tag.color }}">{{ tag.name }}</span></li>
+                    {% endfor %}
+            </ul>
+            <div class="card__items card__items_column">
+                <p class="card__text"><span class="icon-time"></span> {{ recipe.time }} мин.</p>
+                <p class="card__text"><span class="icon-user"></span> <a href="{% url 'profile' recipe.author.username%}" style="color: black">{{ recipe.author}}</a></p>
+            </div>
+        </div>
+        <div class="card__footer">
+            {% include "shopListButton.html" %}
+            {% include "favoriteButton.html" %}
+        </div>
+        </div>

@@ -55,6 +55,8 @@
 @import "../blocks/tags/__checkbox/_style/tags__checkbox_style_green.css";
 @import "../blocks/tags/__checkbox/_style/tags__checkbox_style_orange.css";
 @import "../blocks/tags/__checkbox/_style/tags__checkbox_style_purple.css";
+@import "../blocks/tags/__checkbox/_style/tags__checkbox_style_red.css";
+@import "../blocks/tags/__checkbox/_style/tags__checkbox_style_brown.css";
 
 @import "../blocks/footer/footer.css";
 @import "../blocks/footer/__container/footer__container.css";

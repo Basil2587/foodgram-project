@@ -1,0 +1,24 @@
+{% load user_filters %}
+{% with url_name=request.resolver_match.url_name %}
+<ul class="tags">
+    {% for tag in tags %}
+        <li class="tags__item">
+            <a
+                id="{{ tag.pk }}"
+                class="tags__checkbox tags__checkbox_style_{{ tag.color }}
+                {% if tag.title in request.GET|get_filter_values %} tags__checkbox_active {% endif %}"
+
+
+                {% if url_name == 'index' %}
+                href="{% url 'index' %}?{{ request|get_filter_link:tag }}"
+            {% else %}
+
+            href="{% url 'favorite_index' %}?{{ request|get_filter_link:tag }}"
+{% endif %} >
+</a>
+
+            <span class="tags__label">{{ tag.name }}</span>
+        </li>
+    {% endfor %}
+    {% endwith %}
+</ul>

@@ -7,11 +7,10 @@ User = get_user_model()
 
 class Tag(models.Model):
     tag_options = {
-        "breakfast": ["yellow", "Завтрак"],
+        "breakfast": ["orange", "Завтрак"],
         "lunch": ["green", "Обед"],
         "dinner": ["purple", "Ужин"],
         "salads": ["red", "Салаты"],
-        "bakery products": ["brown", "Выпечка"],
     }
 
     TAG_CHOICES = [
@@ -19,7 +18,6 @@ class Tag(models.Model):
         ("lunch", "Обед"),
         ("dinner", "Ужин"),
         ("salads", "Салаты"),
-        ("bakery products", "Выпечка"),
     ]
     title = models.CharField(
         max_length=20, choices=TAG_CHOICES, verbose_name="Название тэга"

@@ -1,29 +1,67 @@
-{% extends "base.html" %} 
-{% block title %} Последние обновления {% endblock %}
-
+{% extends 'base.html' %}
+{% block title %}Рецепты{% endblock %}
 {% block content %}
-    
-    <div class="container">
+{% load static %}
+{% csrf_token %}
+{% load user_filters %}
 
-        {% include "menu.html" with index=True %}
-
-        <h1> Последние обновления на сайте</h1>
-            {% load cache %}
-            {% cache 1 index_page page page_number %}
-                
-            <!-- Вывод ленты записей -->
-                {% for post in page %}
-                <h3>
-                  Автор: {{ post.author.get_full_name }}, Дата публикации: {{ post.pub_date|date:"d M Y" }}
-                </h3>
-                
-                    {% include "post_item.html" with post=post %}
-                {% endfor %}
-            {% endcache %}
-        <!-- Вывод паджинатора -->
-        {% if page.has_other_pages %}
-            {% include "paginator.html" with items=page paginator=paginator%}
-        {% endif %}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Рецепты</title>
+    <link rel="stylesheet" href="{% static 'pages/index.css' %}">
+</head>
+<body class="body">
+<header class="header">
+</header>
+    <main class="main container">
+        <div class="main__header">
+            <h1 class="main__title">Рецепты</h1>
+            {% include "tags.html"%}
+            </div>
+        <div class="card-list">
+        {% for recipe in page %}
+        {% include "recipe_item.html" %}
+        {% endfor %}
     </div>
+        {% include "paginator.html"%}
+    </main>
+</body>
+</html>
+    {% block scripts %}
+    {% if user.is_authenticated %}
+    <script src="{% static 'js/components/MainCards.js'%}"></script>
+
+    <script src="{% static 'js/components/Purchases.js'%}"></script>
+    <script src="{% static 'js/components/Favorites.js'%}"></script>
+  
+    <script src="{% static 'js/config/config.js'%}"></script>
+    <script src="{% static 'js/components/CardList.js'%}"></script>
+    <script src="{% static 'js/components/Header.js'%}"></script>
+  
+    <script src="{% static 'js/api/Api.js'%}"></script>
+    <script src="{% static 'js/indexAuth.js'%}"></script>
+
+    {% else %}
+
+
+
+    <script src="{% static 'js/components/MainCards.js'%}"></script>
+
+    <script src="{% static 'js/components/Purchases.js'%}"></script>
+
+    <script src="{% static 'js/config/config.js'%}"></script>
+    <script src="{% static 'js/components/CardList.js'%}"></script>
+    <script src="{% static 'js/components/Header.js'%}"></script>
+
+    <script src="{% static 'js/api/Api.js'%}"></script>
+    <script src="{% static 'js/indexNotAuth.js'%}"></script>
+    {% endif %}
+    {% endblock %}
+    
 
 {% endblock %}

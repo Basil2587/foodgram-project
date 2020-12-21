@@ -25,7 +25,7 @@ class IngredientAdmin(admin.ModelAdmin):
     inlines = (RecipeIngreInline,)
 
 
-class TagAdmin(admin.ModelAdmin):
+class TagsAdmin(admin.ModelAdmin):
     list_display = (
         "title",
         "color",
@@ -37,9 +37,9 @@ class TagAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Ingredient, IngredientAdmin)
+admin.site.register(Tag, TagsAdmin)
 admin.site.register(Recipe, RecipeAdmin)
 admin.site.register(RecipeIngre)
 admin.site.register(FollowUser)
 admin.site.register(FollowRecipe)
 admin.site.register(ShoppingList)
-admin.site.register(Tag, TagAdmin)
