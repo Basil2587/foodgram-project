@@ -4,7 +4,7 @@ class Api {
       this.apiUrl =  apiUrl;
   }
 getPurchases () {
-  return fetch(`/purchases`, {
+  return fetch(`/api/purchases`, {
     headers: {
       'Content-Type': 'application/json',
       'X-CSRFToken': document.getElementsByName('csrfmiddlewaretoken')[0].value
@@ -18,7 +18,7 @@ getPurchases () {
     })
 }
 addPurchases (id) {
-  return fetch(`/purchases`, {
+  return fetch(`/api/purchases`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -36,7 +36,7 @@ addPurchases (id) {
     })
 }
 removePurchases (id){
-  return fetch(`/purchases/${id}`, {
+  return fetch(`/api/purchases/${id}`, {
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/json',
@@ -51,7 +51,7 @@ removePurchases (id){
     })
 }
 addSubscriptions(id) {
-  return fetch(`/subscriptions`, {
+  return fetch(`/api/subscriptions`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -69,7 +69,7 @@ addSubscriptions(id) {
     })
 }
 removeSubscriptions (id) {
-  return fetch(`/subscriptions/${id}`, {
+  return fetch(`/api/subscriptions/${id}`, {
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/json',
@@ -84,7 +84,7 @@ removeSubscriptions (id) {
     })
 }
 addFavorites (id)  {
-  return fetch(`/favorites`, {
+  return fetch(`/api/favorites`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -102,7 +102,7 @@ addFavorites (id)  {
       })
 }
 removeFavorites (id) {
-  return fetch(`/favorites/${id}`, {
+  return fetch(`/api/favorites/${id}`, {
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/json',
@@ -117,7 +117,7 @@ removeFavorites (id) {
       })
 }
   getIngredients  (text)  {
-      return fetch(`/ingredients?query=${text}`, {
+      return fetch(`/api/ingredients?query=${text}`, {
           headers: {
               'Content-Type': 'application/json',
               'X-CSRFToken': document.getElementsByName('csrfmiddlewaretoken')[0].value

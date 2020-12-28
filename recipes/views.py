@@ -1,15 +1,12 @@
-import json
-
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.db.models import Sum
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
-
-from .additional_views import get_ingredients, get_ingredients_from_js
+from django.conf import settings
+from .additional_views import get_ingredients_from_js
 from .forms import RecipeForm
 from .models import (
-    FollowRecipe,
     FollowUser,
     Ingredient,
     Recipe,
@@ -25,8 +22,8 @@ def index(request):
     recipe_list = Recipe.objects.order_by("-pub_date").all()
 
     if tags_values:
-        recipe_list = recipe_list.filter(tag__title__in=tags_values).distinct().all()
-    paginator = Paginator(recipe_list, 6)
+        recipe_list = recipe_list.filter(tag__title__in=tags_values).distinct().all() # noqa
+    paginator = Paginator(recipe_list, settings.PAGE_SIZE)
     page_number = request.GET.get("page")
     page = paginator.get_page(page_number)
     tags = Tag.objects.all()
@@ -41,7 +38,7 @@ def index(request):
 def new_recipe(request):
     tags = Tag.objects.all()
     if request.method == "POST":
-        recipe_form = RecipeForm(request.POST or None, files=request.FILES or None)
+        recipe_form = RecipeForm(request.POST or None, files=request.FILES or None) # noqa
         ingredients_req = get_ingredients_from_js(request)
         if not ingredients_req:
             recipe_form.add_error(None, "Добавьте ингредиенты")
@@ -75,10 +72,8 @@ def recipe_edit(request, username, recipe_id):
     tags = Tag.objects.all()
     profile = get_object_or_404(User, username=username)
     recipe = get_object_or_404(Recipe, id=recipe_id, author=profile)
-    head_form = f"Редактирование рецепта ({recipe.title})"
-    text_btn_form = "Сохранить изменения"
     if request.user != recipe.author:
-        return redirect("recipe", username=request.user.username, recipe_id=recipe_id)
+        return redirect("recipe", username=request.user.username, recipe_id=recipe_id) # noqa
     if request.method == "POST":
         form = RecipeForm(
             request.POST or None, files=request.FILES or None, instance=recipe
@@ -108,8 +103,6 @@ def recipe_edit(request, username, recipe_id):
             "form": form,
             "recipe": recipe,
             "tags": tags,
-            "head_form": head_form,
-            "text_btn_form": text_btn_form,
         },
     )
 
@@ -122,7 +115,7 @@ def profile(request, username):
         .filter(author=person)
         .select_related("author")
     )
-    paginator = Paginator(post_list, 6)
+    paginator = Paginator(post_list, settings.PAGE_SIZE)
     page_number = request.GET.get("page")
     page = paginator.get_page(page_number)
     author = User.objects.get(username=username)
@@ -169,45 +162,10 @@ def subscriptions_index(request):
     authors_list = FollowUser.objects.select_related("user", "author").filter(
         user=request.user
     )
-    paginator = Paginator(authors_list, 6)
+    paginator = Paginator(authors_list, settings.PAGE_SIZE)
     page_number = request.GET.get("page")
     page = paginator.get_page(page_number)
-    return render(request, "myFollow.html", {"page": page, "paginator": paginator})
-
-
-@login_required
-def subscriptions(request):
-    author_id = int(json.loads(request.body).get("id"))
-    author = get_object_or_404(User, pk=author_id)
-    if request.user.id != author_id:
-        FollowUser.objects.create(user=request.user, author=author)
-        return JsonResponse({"success": "ok"})
-
-
-@login_required
-def subscriptions_delete(request, author_id):
-    user = get_object_or_404(User, username=request.user.username)
-    author = get_object_or_404(User, id=author_id)
-    follow_user = get_object_or_404(FollowUser, user=user, author=author)
-    follow_user.delete()
-    return JsonResponse({"success": True})
-
-
-@login_required
-def favorites(request):
-    recipe_id = json.loads(request.body)["id"]
-    recipe = get_object_or_404(Recipe, id=recipe_id)
-    FollowRecipe.objects.get_or_create(user=request.user, recipe=recipe)
-    return JsonResponse({"success": True})
-
-
-@login_required
-def favorites_delete(request, recipe_id):
-    recipe = get_object_or_404(Recipe, id=recipe_id)
-    user = get_object_or_404(User, username=request.user.username)
-    follow_recipe = get_object_or_404(FollowRecipe, user=user, recipe=recipe)
-    follow_recipe.delete()
-    return JsonResponse({"success": True})
+    return render(request, "myFollow.html", {"page": page, "paginator": paginator}) # noqa
 
 
 @login_required
@@ -220,30 +178,13 @@ def favorite_index(request):
         following_list = (
             following_list.filter(tag__title__in=tags_values).distinct().all()
         )
-    paginator = Paginator(following_list, 6)
+    paginator = Paginator(following_list, settings.PAGE_SIZE)
     page_number = request.GET.get("page")
     page = paginator.get_page(page_number)
     tags = Tag.objects.all()
     return render(
         request, "favorite.html", {"page": page, "paginator": paginator, "tags": tags}
     )
-
-
-@login_required
-def purchases(request):
-    recipe_id = json.loads(request.body)["id"]
-    recipe = get_object_or_404(Recipe, id=recipe_id)
-    ShoppingList.objects.get_or_create(user=request.user, recipe=recipe)
-    return JsonResponse({"success": True})
-
-
-@login_required
-def purchases_delete(request, recipe_id):
-    recipe = get_object_or_404(Recipe, id=recipe_id)
-    user = get_object_or_404(User, username=request.user.username)
-    obj = get_object_or_404(ShoppingList, user=user, recipe=recipe)
-    obj.delete()
-    return JsonResponse({"success": True})
 
 
 @login_required
