@@ -37,7 +37,7 @@ class Tag(models.Model):
 
 class Ingredient(models.Model):
     title = models.CharField(max_length=300, verbose_name="Название")
-    dimension = models.CharField(max_length=20, verbose_name="Единица измерения")
+    dimension = models.CharField(max_length=20, verbose_name="Единица измерения") # noqa
 
     def __str__(self):
         return f"{self.title} {self.dimension}"
