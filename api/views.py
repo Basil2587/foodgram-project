@@ -1,6 +1,4 @@
 import json
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views import View
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404

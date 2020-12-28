@@ -183,7 +183,7 @@ def favorite_index(request):
     page = paginator.get_page(page_number)
     tags = Tag.objects.all()
     return render(
-        request, "favorite.html", {"page": page, "paginator": paginator, "tags": tags}
+        request, "favorite.html", {"page": page, "paginator": paginator, "tags": tags} # noqa
     )
 
 

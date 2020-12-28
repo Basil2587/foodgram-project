@@ -8,7 +8,6 @@ from .models import (
     FollowUser,
     ShoppingList,
     Tag,
-    User,
 )
 
 
