@@ -43,8 +43,8 @@ jobs:
     - name: executing remote ssh commands to deploy
       uses: appleboy/ssh-action@master
       with:
-        host: 84.201.148.248
-        username: basil
+        host: 84.201.144.209
+        username: foodgram
         key: ${{ secrets.SSH_KEY }}
         port: 22
         script: |
