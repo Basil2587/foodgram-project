@@ -30,17 +30,14 @@ def get_filter_link(request, tag):
 
 @register.filter(name="favorite")
 def favorite(recipe, user):
-    if FollowRecipe.objects.filter(user=user, recipe=recipe):
-        return True
+    return FollowRecipe.objects.filter(user=user, recipe=recipe).exists()
 
 
 @register.filter(name="follow")
 def follow(author, user):
-    if FollowUser.objects.filter(user=user, author=author):
-        return True
+    return FollowUser.objects.filter(user=user, author=author).exists()
 
 
 @register.filter(name="shop")
 def shop(recipe, user):
-    if ShoppingList.objects.filter(user=user, recipe=recipe):
-        return True
+    return ShoppingList.objects.filter(user=user, recipe=recipe).exists()

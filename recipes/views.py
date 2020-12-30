@@ -4,7 +4,7 @@ from django.db.models import Sum
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.conf import settings
-from .additional_views import get_ingredients_from_js
+from .utils import get_ingredients_from_js
 from .forms import RecipeForm
 from .models import (
     FollowUser,
@@ -19,7 +19,7 @@ from .models import (
 
 def index(request):
     tags_values = request.GET.getlist("filters")
-    recipe_list = Recipe.objects.order_by("-pub_date").all()
+    recipe_list = Recipe.objects.all()
 
     if tags_values:
         recipe_list = recipe_list.filter(tag__title__in=tags_values).distinct().all() # noqa
@@ -37,12 +37,12 @@ def index(request):
 @login_required
 def new_recipe(request):
     tags = Tag.objects.all()
+    recipe_form = RecipeForm(request.POST or None, files=request.FILES or None)
     if request.method == "POST":
-        recipe_form = RecipeForm(request.POST or None, files=request.FILES or None) # noqa
         ingredients_req = get_ingredients_from_js(request)
         if not ingredients_req:
             recipe_form.add_error(None, "Добавьте ингредиенты")
-        if recipe_form.is_valid():
+        elif recipe_form.is_valid():
             recipe = recipe_form.save(commit=False)
             recipe.author = request.user
             recipe.save()
@@ -54,12 +54,11 @@ def new_recipe(request):
                 recipe_ingredient.save()
             recipe_form.save_m2m()
             return redirect("index")
-        recipe_form = RecipeForm()
     else:
         recipe_form = RecipeForm()
     return render(
         request,
-        "formRecipe.html",
+        "form_recipe.html",
         {
             "form": recipe_form,
             "tags": tags,
@@ -98,7 +97,7 @@ def recipe_edit(request, username, recipe_id):
 
     return render(
         request,
-        "formChangeRecipe.html",
+        "form_change_recipe.html",
         {
             "form": form,
             "recipe": recipe,
@@ -111,9 +110,7 @@ def profile(request, username):
     person = get_object_or_404(User, username=username)
     count_post = Recipe.objects.filter(author=person).count()
     post_list = (
-        Recipe.objects.order_by("-pub_date")
-        .filter(author=person)
-        .select_related("author")
+        Recipe.objects.filter(author=person).select_related("author")
     )
     paginator = Paginator(post_list, settings.PAGE_SIZE)
     page_number = request.GET.get("page")
@@ -129,7 +126,7 @@ def profile(request, username):
             follow_stat = True
         return render(
             request,
-            "authorRecipe.html",
+            "author_recipe.html",
             {
                 "page": page,
                 "paginator": paginator,
@@ -141,7 +138,7 @@ def profile(request, username):
         )
     return render(
         request,
-        "authorRecipe.html",
+        "author_recipe.html",
         {
             "page": page,
             "paginator": paginator,
@@ -165,7 +162,7 @@ def subscriptions_index(request):
     paginator = Paginator(authors_list, settings.PAGE_SIZE)
     page_number = request.GET.get("page")
     page = paginator.get_page(page_number)
-    return render(request, "myFollow.html", {"page": page, "paginator": paginator}) # noqa
+    return render(request, "my_follow.html", {"page": page, "paginator": paginator}) # noqa
 
 
 @login_required
@@ -190,7 +187,7 @@ def favorite_index(request):
 @login_required
 def shop_list(request):
     shopList = Recipe.objects.filter(shop_list__user=request.user)
-    return render(request, "shopList.html", {"shopList": shopList})
+    return render(request, "shop_list.html", {"shopList": shopList})
 
 
 @login_required

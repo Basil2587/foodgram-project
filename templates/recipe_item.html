@@ -13,11 +13,11 @@
             </ul>
             <div class="card__items card__items_column">
                 <p class="card__text"><span class="icon-time"></span> {{ recipe.time }} мин.</p>
-                <p class="card__text"><span class="icon-user"></span> <a href="{% url 'profile' recipe.author.username%}" style="color: black">{{ recipe.author}}</a></p>
+                <p class="card__text"><span class="icon-user"></span> <a href="{% url 'profile' recipe.author.username%}" style="color: black">{{ recipe.author.get_full_name}}</a></p>
             </div>
         </div>
         <div class="card__footer">
-            {% include "shopListButton.html" %}
-            {% include "favoriteButton.html" %}
+            {% include "shop_list_button.html" %}
+            {% include "favorite_button.html" %}
         </div>
         </div>
