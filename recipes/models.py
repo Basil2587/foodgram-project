@@ -65,6 +65,9 @@ class Recipe(models.Model):
     )
     time = models.CharField(max_length=45, verbose_name="Время приготовления")
 
+    class Meta:
+        ordering = ['-pub_date']
+
     def __str__(self):
         return self.title
 

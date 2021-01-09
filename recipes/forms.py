@@ -13,7 +13,6 @@ class RecipeForm(forms.ModelForm):
             "description",
             "image",
         )
-        ordering = ['- pub_date']
         widgets = {
             "tag": forms.CheckboxSelectMultiple(),
         }

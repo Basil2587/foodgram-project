@@ -30,19 +30,19 @@
                     <ul class="single-card__items">
                         <li class="single-card__item"><p class="single-card__text"><span class="icon-user" ></span> {{ recipe.author }}</p></li>
                         {% if user == recipe.author %}
-                        <li class="single-card__item">  <a style="margin-left: 2.5em" href="{% url 'recipe_edit' recipe.author.username recipe.id %}" class="single-card__text">Редактировать</a></li>
+                        <li class="single-card__item">  <a style="margin-left: 2.5em" href="{% url 'recipe_edit' recipe.author.username recipe.id %}" class="single-card__text">Редактировать рецепт</a></li>
                        
                         {% endif %}
                     </ul>
                 </div>
                 <ul class="single-card__items">
-                    {% include "shop_list_button.html" %}
+                    <li class="single-card__item">{% include "shop_list_button.html" %}</li>
                 {% if user.is_authenticated %}
-                {% if recipe.author|follow:user %}
-                <li class="single-card__item"><button class="button button_style_light-blue button_size_auto" name="subscribe">Отписаться от автора</button></li>
-              {% else %}
-              <li class="single-card__item"><button class="button button_style_light-blue button_size_subscribe" name="subscribe" data-out>Подписаться на автора</button></li>
-              {% endif %}
+                    {% if recipe.author|follow:user %}
+                    <li class="single-card__item"><button class="button button_style_light-blue button_size_auto" name="subscribe">Отписаться от автора</button></li>
+                    {% else %}
+                    <li class="single-card__item"><button class="button button_style_light-blue button_size_subscribe" name="subscribe" data-out>Подписаться на автора</button></li>
+                    {% endif %}
                 {% endif %}
                 </ul>
                 <div class="single-card__section">
