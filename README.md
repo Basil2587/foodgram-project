@@ -20,7 +20,7 @@
 2. Скачать файлы проекта из репозитория или клонировать
 3. В директории проекта создайте файл .env с настройками для подключения к БД:
 ```
-SECRET_KEY=можно сгенерировать [по адресу](https://djecrety.ir)
+SECRET_KEY=django_secret_key
 DB_ENGINE=db_engine
 DB_NAME=db_name
 POSTGRES_USER=postgres_user
