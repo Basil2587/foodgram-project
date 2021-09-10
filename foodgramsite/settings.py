@@ -21,7 +21,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '%-+$4urghmglxg6673%s1!o+xp56ave)52l1xnez)g8jjyred('
+SECRET_KEY = str(os.environ.get('SECRET_KEY'))
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
@@ -34,8 +34,6 @@ INTERNAL_IPS = [
 # Application definition
 
 INSTALLED_APPS = [
-    'users',
-    'recipes',
     "django.contrib.sites",
     'django.contrib.admin',
     'django.contrib.auth',
@@ -47,6 +45,8 @@ INSTALLED_APPS = [
     "debug_toolbar",
     "django.contrib.flatpages",
     'rest_framework',
+    'users',
+    'recipes',
     'api',
 ]
 
