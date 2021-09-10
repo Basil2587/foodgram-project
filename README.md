@@ -37,5 +37,4 @@ docker-compose up --build -d
  - миграция `docker-compose exec web python manage.py migrate`
  - создание администратора `docker-compose exec web python manage.py createsuperuser`
 
-
 Все работает! Проект доступен по локальному адресу http://127.0.0.1:5000/
